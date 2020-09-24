@@ -1,0 +1,35 @@
+version: "3"
+
+services:
+  nipapd:
+    build: ./nipap
+    ports:
+      - "1337:${COMPOSE_NIPAPD_PORT}"
+    environment:
+      DB_HOST: "db"
+      DB_NAME: "${COMPOSE_POSTGRES_DB}"
+      DB_USERNAME: "${COMPOSE_POSTGRES_USER}"
+      DB_PASSWORD: "${COMPOSE_POSTGRES_PASS}"
+      NIPAP_USERNAME: "${COMPOSE_NIPAPD_USER}"
+      NIPAP_PASSWORD: "${COMPOSE_NIPAPD_PASS}"
+    restart: unless-stopped
+    depends_on:
+      - db
+  nipap-www:
+    build: ./nipap-www
+    ports:
+      - "80:${COMPOSE_NIPAPWWW_PORT}"
+    environment:
+      NIPAPD_USERNAME: "${COMPOSE_NIPAPD_USER}"
+      NIPAPD_PASSWORD: "${COMPOSE_NIPAPD_PASS}"
+      WWW_USERNAME: "${COMPOSE_NIPAPWWW_USER}"
+      WWW_PASSWORD: "${COMPOSE_NIPAPWWW_PASS}"
+    depends_on:
+      - nipapd
+    restart: unless-stopped
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: "${COMPOSE_POSTGRES_USER}"
+      POSTGRES_PASSWORD: "${COMPOSE_POSTGRES_PASS}"
+      POSTGRES_DB: "${COMPOSE_POSTGRES_DB}"
