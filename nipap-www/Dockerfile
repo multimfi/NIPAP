@@ -1,7 +1,7 @@
 # This file describes a docker image for running nipap-www in docker
 #
 # Build the docker image:
-#     docker build -t nipap-www -f Dockerfile.www .
+#     docker build -t nipap-www -f Dockerfile .
 #
 # Run by linking to the container running nipapd. -i -t is for interactive,
 # use -d if you wish to run the container in the background:
@@ -47,9 +47,9 @@ RUN apt-get update -qy && apt-get upgrade -qy \
  && rm -rf /var/lib/apt/lists/*
 
 # Install pynipap, nipap and nipap-www
-COPY pynipap /pynipap
-COPY nipap /nipap
-COPY nipap-www /nipap-www
+COPY ../pynipap /pynipap
+COPY ../nipap /nipap
+COPY . nipap-www
 RUN cd /pynipap && python setup.py install && \
     cd /nipap && pip --no-input install -r requirements.txt && python setup.py install && \
     cd /nipap-www && pip --no-input install -r requirements.txt && python setup.py install && \

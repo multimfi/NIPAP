@@ -1,7 +1,7 @@
 # This file describes a docker image for running nipapd in docker
 #
 # Build the docker image:
-#     docker build -t nipapd -f Dockerfile.nipapd .
+#     docker build -t nipapd -f Dockerfile .
 #
 # Run by linking to the container running postgres. -i -t is for interactive,
 # use -d if you wish to run the container in the background:
@@ -53,7 +53,7 @@ RUN apt-get update -qy && apt-get upgrade -qy \
  && rm -rf /var/lib/apt/lists/*
 
 
-COPY nipap /nipap
+COPY . /nipap
 WORKDIR /nipap
 RUN pip --no-input install -r requirements.txt \
  && python setup.py install
